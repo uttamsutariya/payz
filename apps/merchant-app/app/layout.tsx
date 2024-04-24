@@ -6,8 +6,8 @@ import { Providers } from "../provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-    title: "Merchant Wallet",
-    description: "let's transfer wallte",
+    title: "Merchant | Payz Wallet",
+    description: "Simple Wallte App",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
