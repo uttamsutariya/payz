@@ -11,7 +11,17 @@ app.post("/hdfcWebhook", async (req, res) => {
         amount: req.body.amount,
     }
 
-    console.log(paymentInformation)
+    const tnx = await db.onRampTransaction.findFirst({
+        where: {
+            token: paymentInformation.token,
+        },
+    })
+
+    if (tnx?.status !== "Processing") {
+        return res.status(411).json({
+            message: "Can't proceed with Failed / Successfull transaction",
+        })
+    }
 
     try {
         await db.$transaction([
