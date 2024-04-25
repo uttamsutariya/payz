@@ -17,7 +17,10 @@ const OnRampTransaction = ({ transactions }: OnRampTransactionProps) => {
                             <div className="text-sm">Received INR</div>
                             <div className="text-slate-600 text-xs">{t.time.toDateString()}</div>
                         </div>
-                        <div className="flex flex-col justify-center">+ Rs {t.amount / 100}</div>
+                        <div className="flex justify-center gap-4">
+                            <span className={`${t.status === "Processing" ? "text-blue-700" : t.status === "Success" ? "text-green-700" : "text-red-700"} font-semibold`}>{t.status}</span>
+                            <span>+ Rs {t.amount / 100}</span>
+                        </div>
                     </div>
                 ))
             )}

@@ -10,18 +10,16 @@ export const authOptions = {
                 phone: { label: "Phone number", type: "text", placeholder: "9664724887", required: true },
                 password: { label: "Password", type: "password", required: true },
             },
-            // TODO: User credentials type from next-auth
-            async authorize(credentials: any) {
-                // Do zod validation, OTP validation here
-                const hashedPassword = await bcrypt.hash(credentials.password, 10)
+            async authorize(credentials: Record<"phone" | "password", string> | undefined) {
+                const hashedPassword = await bcrypt.hash(credentials?.password || "", 10)
                 const existingUser = await db.user.findFirst({
                     where: {
-                        number: credentials.phone,
+                        number: credentials?.phone,
                     },
                 })
 
                 if (existingUser) {
-                    const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password)
+                    const passwordValidation = await bcrypt.compare(credentials?.password || "", existingUser.password)
                     if (passwordValidation) {
                         return {
                             id: existingUser.id.toString(),
@@ -35,8 +33,14 @@ export const authOptions = {
                 try {
                     const user = await db.user.create({
                         data: {
-                            number: credentials.phone,
+                            number: credentials?.phone || "",
                             password: hashedPassword,
+                            Balance: {
+                                create: {
+                                    amount: 0,
+                                    locked: 0,
+                                },
+                            },
                         },
                     })
 

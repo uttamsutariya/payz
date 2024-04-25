@@ -5,23 +5,23 @@ const app = express()
 app.use(express.json())
 
 app.post("/hdfcWebhook", async (req, res) => {
-    // validate the request from bank
-
     const paymentInformation = {
         token: req.body.token,
         userId: req.body.user_identifier,
         amount: req.body.amount,
     }
 
+    console.log(paymentInformation)
+
     try {
         await db.$transaction([
-            db.balance.update({
+            db.balance.updateMany({
                 where: {
-                    userId: paymentInformation.userId,
+                    userId: Number(paymentInformation.userId),
                 },
                 data: {
                     amount: {
-                        increment: paymentInformation.amount,
+                        increment: Number(paymentInformation.amount),
                     },
                 },
             }),
@@ -44,4 +44,10 @@ app.post("/hdfcWebhook", async (req, res) => {
             message: "Error processing webhook",
         })
     }
+})
+
+const PORT = 3003
+
+app.listen(PORT, () => {
+    console.log(`bank webhook running on ${PORT}`)
 })
