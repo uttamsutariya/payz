@@ -1,3 +1,7 @@
 export default function Transactions() {
-    return <p>Transactions</p>
+    return (
+        <div className="w-screen">
+            <div className="text-4xl text-[#6a51a6] pt-8 px-4 mb-8 font-bold">Transactions</div>
+        </div>
+    )
 }
